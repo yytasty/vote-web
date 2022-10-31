@@ -1,0 +1,117 @@
+<template>
+  <div class="addScore">
+    <div class="top">
+      <div class="name">
+          {{name}}
+      </div>
+    </div>
+    <el-divider />
+    <div class="form" v-loading="loading">
+      <div class="item" v-for="item in scoreList" :key="item.id">
+        <div class="name">{{item.name}}：</div>
+        <div class="num">
+          <el-slider v-model="item.score" show-input :step="0.5" :max="item.maxScore" />
+        </div>
+      </div>
+    </div>
+    <el-divider />
+    <div class="handle">
+      <el-button  type="primary" @click="handleSubmit" :loading="loading">确定</el-button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { inject, ref , onMounted} from 'vue'
+import { Search, Plus } from '@element-plus/icons-vue'
+import { useRoute } from 'vue-router'
+const { router, fetch, message } = inject('global')
+
+const scoreList = ref([])
+const id = ref('')
+const name = ref('')
+const loading = ref(false)
+
+// 点击提交
+function handleSubmit(url){
+  loading.value = true
+  fetch.post('/app/vote',{
+    "judgeId": localStorage.getItem('judgeId'),
+    "contestantId": id.value,
+    "scoreList": scoreList.value.map(v=>{
+      return {
+        "ruleItemId": v.id,
+        "score": v.score
+      }
+    })
+  }).then(res=>{
+    if(res.data){
+      ElMessage.success('提交成功')
+      router.go(-1)
+    }else{
+      ElMessage.error(res?.msg || '提交失败')
+    }
+  }).catch(err=>{
+    console.log(err)
+  }).finally(()=>{
+    loading.value = false
+  })
+}
+
+// 获取列表
+function getList(){
+  loading.value = true
+  fetch.get(`/admin/ruleItem?available=${localStorage.getItem('available')}`
+  ).then(res=>{
+    scoreList.value = res.data.map(v=>{
+      v.score = 0
+      return v
+    })
+  }).catch(err=>{
+    console.log(err)
+  }).finally(()=>{
+    loading.value = false
+  })
+}
+
+onMounted(()=>{
+  getList()
+  const route = useRoute()
+  id.value = route.query.id
+  name.value = route.query.name
+})
+
+</script>
+
+<style lang="less" scoped>
+.addScore {
+  font-size: 12px;
+  .top{
+    text-align: center;
+    font-size: 16px;
+    padding-top: 20px;
+  }
+  .form{
+    padding: 0 20px;
+    .item{
+      padding: 5px 0;
+      .name{
+        padding-bottom: 10px;
+      }
+      .num{
+        padding-left: 20px;
+      }
+    }
+    /deep/.el-input-number{
+      width: 120px;
+    }
+  }
+  .handle{
+    padding: 0 20px;
+    .el-button{
+      width: 100%;
+    }
+  }
+}
+
+</style>
