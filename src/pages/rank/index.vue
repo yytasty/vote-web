@@ -40,12 +40,12 @@
         </div>
       </el-card>
     </div>
-    <audio src="https://downsc.chinaz.net/Files/DownLoad/sound1/202210/y1289.wav"  autoplay="autoplay">
+    <audio v-if="!isShow" src="https://downsc.chinaz.net/Files/DownLoad/sound1/202210/y1289.wav"  autoplay="autoplay">
     </audio>
   </div>
   <div class="box" v-show="!isShow">
     精彩即将呈现 ...
-    <h2 >42</h2>
+    <h2 >6</h2>
   </div>
 </template>
 
@@ -69,7 +69,7 @@ function getList(){
 }
 
 let NUMBER = 1;
-let COUNT = 42;
+let COUNT = 6;
 let COLORS = ['#8c00ff', '#006bff', '#4fff00', '#ffb800', '#ff0000'];
 let timer = null;
 function animation(){
