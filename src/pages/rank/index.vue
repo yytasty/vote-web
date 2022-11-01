@@ -2,7 +2,7 @@
   <div class="rankList" :style="`opacity:${isShow?1:0}`">
     <div class="top">
       <div class="msg">排行榜</div>
-      <div class="topList">
+      <!-- <div class="topList">
         <div class="one topItem" v-if="list[0]">
           <img src="../../../public/皇冠1.png" alt="" class="img" />
           <div class="rank">{{list[0]?.sort}}</div>
@@ -27,9 +27,10 @@
             {{list[2]?.score}} 分
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
-    <div class="list" v-if="list.length>3">
+    <div id="echarts" style="width:100%;height:500px"></div>
+    <!-- <div class="list" v-if="list.length>3">
       <el-card class="item" v-for="item in list.slice(3)" :key="item.id">
         <div class="itemInfo">
           <div class="rank">{{item.sort}}</div>
@@ -39,7 +40,7 @@
           </div>
         </div>
       </el-card>
-    </div>
+    </div> -->
     <audio v-if="!isShow" src="https://downsc.chinaz.net/Files/DownLoad/sound1/202210/y1289.wav"  autoplay="autoplay">
     </audio>
   </div>
@@ -50,7 +51,8 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted } from 'vue'
+import * as echarts from 'echarts';
+import { inject, ref, onMounted, watch } from 'vue'
 
 const { router, fetch } = inject('global')
 
@@ -68,10 +70,56 @@ function getList(){
   })
 }
 
+function setEcharts(){
+  var chartDom = document.getElementById('echarts');
+  var myChart = echarts.init(chartDom);
+  var option;
+  option = {
+    xAxis: {
+      type: 'category',
+      data: list.value.map(v=>v.name)
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        data: list.value.map(v=>v.score),
+        type: 'bar',
+        showBackground: true,
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: '#83bff6' },
+          { offset: 0.5, color: '#188df0' },
+          { offset: 1, color: '#188df0' }
+        ]),
+        itemStyle: {        //上方显示数值
+            normal: {
+                label: {
+                    show: true, //开启显示
+                    position: 'top', //在上方显示
+                    textStyle: { //数值样式
+                        color: 'black',
+                        fontSize: 16
+                    }
+                }
+            }
+        }
+      }
+    ]
+  };
+
+  option && myChart.setOption(option);
+}
+
 let NUMBER = 1;
 let COUNT = 6;
 let COLORS = ['#8c00ff', '#006bff', '#4fff00', '#ffb800', '#ff0000'];
 let timer = null;
+watch(()=>isShow.value,()=>{
+  if(isShow.value){
+    setEcharts()
+  }
+})
 function animation(){
   let h2 = document.querySelector('h2')
   h2.style.display = 'block';
@@ -94,6 +142,7 @@ function animation(){
 }
 
 onMounted(()=>{
+
   getList()
   animation()
 })
@@ -112,7 +161,7 @@ onMounted(()=>{
   }
   .top{
     text-align: center;
-    height: 220px;
+    // height: 220px;
     .msg{
       text-align: center;
       font-size: 20px;
