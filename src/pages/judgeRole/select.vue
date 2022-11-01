@@ -1,7 +1,7 @@
 <template>
-  <div class="scoreList">
+  <div class="scoreList" v-loading="loading">
     <div class="title">请选择角色</div>
-    <div class="itemList" v-loading="loading">
+    <div class="itemList">
       <div class="item" v-for="element in list" :key="element.id">
         <div class="top">
           <!-- <div class="handleMove">

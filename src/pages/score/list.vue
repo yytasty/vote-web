@@ -1,6 +1,6 @@
 <template>
-  <div class="scoreList">
-    <div class="itemList" v-loading="loading">
+  <div class="scoreList" v-loading="loading">
+    <div class="itemList">
       <draggable v-model="list" item-key="id"  handle=".handleMove">
         <template #item="{element}">
           <div class="item">

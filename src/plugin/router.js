@@ -61,6 +61,11 @@ const routes = [
     name: '投票详情',
     component: () => import('../pages/vote/addMinute.vue') 
   },
+  {
+    path: '/vote/log',
+    name: '评分记录',
+    component: () => import('../pages/vote/log.vue') 
+  },
 ]
 const router = createRouter({
     history: createWebHistory(),

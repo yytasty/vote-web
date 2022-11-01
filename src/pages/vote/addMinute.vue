@@ -35,8 +35,9 @@ const loading = ref(false)
 // 点击提交
 function handleSubmit(url){
   loading.value = true
-  fetch.post('/app/vote',{
+  fetch.post('/app/vote/v2',{
     "judgeId": localStorage.getItem('judgeId'),
+    "judgeRoleId": localStorage.getItem('judgeRoleId'),
     "contestantId": id.value,
     "scoreList": scoreList.value.map(v=>{
       return {
@@ -61,7 +62,7 @@ function handleSubmit(url){
 // 获取列表
 function getList(){
   loading.value = true
-  fetch.get(`/admin/ruleItem?available=${localStorage.getItem('available')}`
+  fetch.get(`/app/ruleItem?judgeRoleId=${localStorage.getItem('judgeRoleId')}`
   ).then(res=>{
     scoreList.value = res.data.map(v=>{
       v.score = 0

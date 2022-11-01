@@ -1,6 +1,6 @@
 <template>
-  <div class="scoreList">
-    <div class="itemList" v-loading="loading">
+  <div class="scoreList" v-loading="loading">
+    <div class="itemList">
       <div class="item" v-for="element in list" :key="element.id">
         <div class="top">
           <!-- <div class="handleMove">
