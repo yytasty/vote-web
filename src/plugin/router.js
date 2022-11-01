@@ -32,6 +32,21 @@ const routes = [
     component: () => import('../pages/statistics/index.vue') 
   },
   {
+    path: '/judgeRole/list',
+    name: '评委角色',
+    component: () => import('../pages/judgeRole/list.vue') 
+  },
+  {
+    path: '/judgeRole/add',
+    name: '添加角色',
+    component: () => import('../pages/judgeRole/add.vue') 
+  },
+  {
+    path: '/judgeRole/select',
+    name: '选择角色',
+    component: () => import('../pages/judgeRole/select.vue') 
+  },
+  {
     path: '/rank',
     name: '选手排名',
     component: () => import('../pages/rank/index.vue') 

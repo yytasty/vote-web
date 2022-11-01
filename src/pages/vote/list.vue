@@ -29,12 +29,12 @@ function getList(){
   loading.value = true
   fetch.get(`/app/contestant`).then(res=>{
     list.value = res.data?.contestantList||[]
-    if(res.data?.judgeId){
-      if(localStorage.getItem('judgeId')){
-        return 
-      }
-      localStorage.setItem('judgeId', res.data?.judgeId)
-    }
+    // if(res.data?.judgeId){
+    //   if(localStorage.getItem('judgeId')){
+    //     return 
+    //   }
+    //   localStorage.setItem('judgeId', res.data?.judgeId)
+    // }
   }).finally(()=>{
     loading.value = false
   })

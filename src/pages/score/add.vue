@@ -5,11 +5,17 @@
         <el-form-item label="评分项：">
           <el-input v-model="name"  />
         </el-form-item>
-        <el-form-item label="可评人员：">
+        <!-- <el-form-item label="可评人员：">
           <el-radio-group v-model="available" class="ml-4">
             <el-radio :label="0">不区分</el-radio>
             <el-radio :label="1">评委</el-radio>
             <el-radio :label="2">观众</el-radio>
+          </el-radio-group>
+        </el-form-item> -->
+        <el-form-item label="可评人员：">
+          <el-radio-group v-model="judgeRoleId" class="ml-4">
+            <el-radio :label="0">所有人</el-radio>
+            <el-radio style="width:100%;" :label="item.id" v-for="item in judgeRoleList" :key="item.id">{{item.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="满分：">
@@ -32,8 +38,9 @@ import { useRoute } from 'vue-router'
 const { router, fetch, message } = inject('global')
 
 const name = ref('')
-const available = ref(0)
 const maxScore = ref(1)
+const judgeRoleId = ref(0)
+const judgeRoleList = ref([])
 const id = ref('')
 const loading = ref(false)
 
@@ -43,7 +50,7 @@ function handleSubmit(url){
     loading.value = true
     fetch.put('/admin/ruleItem',{
       name:name.value,
-      available:available.value,
+      judgeRoleId:judgeRoleId.value,
       maxScore: maxScore.value,
       id: id.value
     }).then(res=>{
@@ -59,7 +66,7 @@ function handleSubmit(url){
   loading.value = true
   fetch.post('/admin/ruleItem',{
     name:name.value,
-    available:available.value,
+    judgeRoleId:judgeRoleId.value,
     maxScore: maxScore.value
   }).then(res=>{
     ElMessage.success('添加成功')
@@ -77,9 +84,9 @@ function getInfo(id){
   fetch.get(`/admin/ruleItem/${id}`
   ).then(res=>{
     if(res.data?.id){
-      name.value = res.data?.name
-      available.value = res.data?.available
-      maxScore.value = res.data?.maxScore
+      name.value = res.data?.name || ''
+      judgeRoleId.value = res.data?.judgeRoleId || 0
+      maxScore.value = res.data?.maxScore || 1
     }
   }).catch(err=>{
     console.log(err)
@@ -88,7 +95,25 @@ function getInfo(id){
   })
 }
 
+// 获取评委角色列表
+function getjudgeRoleList(){
+  loading.value = true
+  fetch.get('/admin/judgeRole').then(res=>{
+    if(res.data){
+      judgeRoleList.value = res.data
+      if(!judgeRoleId.value){
+        judgeRoleId.value = judgeRoleList.value[0]?.id||0
+      }
+    }
+  }).catch(err=>{
+
+  }).finally(()=>{
+    loading.value = false
+  })
+}
+
 onMounted(()=>{
+  getjudgeRoleList()
   const route = useRoute()
   id.value = route.query.id
   if(id.value){

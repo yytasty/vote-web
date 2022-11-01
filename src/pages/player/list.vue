@@ -157,6 +157,7 @@ onMounted(()=>{
         align-items: center;
         .el-avatar{
           background-color: rgb(105, 105, 247);
+          font-size: 20px;
         }
       }
       .bottom{

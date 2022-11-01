@@ -5,6 +5,10 @@
         <el-icon class="img" style="color:#409EFF"><UserFilled /></el-icon>
         <div class="name">选手管理</div>
       </div>
+      <div class="item" @click="goPage('/judgeRole/list')">
+        <el-icon class="img" style="color:palevioletred"><VideoCameraFilled /></el-icon>
+        <div class="name">评委角色</div>
+      </div>
       <div class="item" @click="goPage('/score/list')">
         <el-icon class="img" style="color:#67C23A"><Histogram /></el-icon>
         <div class="name">评分标准</div>
@@ -23,7 +27,7 @@
 
 <script setup>
 import { inject } from 'vue'
-import { UserFilled, Histogram, Management, TrendCharts } from '@element-plus/icons-vue'
+import { UserFilled, Histogram, Management, VideoCameraFilled, TrendCharts } from '@element-plus/icons-vue'
 const { router, fetch } = inject('global')
 
 function goPage(url){
