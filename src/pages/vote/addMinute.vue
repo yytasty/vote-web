@@ -16,7 +16,19 @@
     </div>
     <el-divider />
     <div class="handle">
-      <el-button  type="primary" @click="handleSubmit" :loading="loading">确定</el-button>
+      <el-popconfirm
+        confirm-button-text="确定"
+        cancel-button-text="取消"
+        :icon="InfoFilled"
+        icon-color="#626AEF"
+        :title="`你确定要提交当前评价吗？`"
+        @confirm="handleDelete(element)"
+        @click="handleSubmit"
+      >
+        <template #reference>
+          <el-button  type="primary" :loading="loading">确定</el-button>
+        </template>
+      </el-popconfirm>
     </div>
   </div>
 </template>

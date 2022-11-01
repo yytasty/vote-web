@@ -41,12 +41,15 @@
         </div>
       </el-card>
     </div> -->
-    <audio v-if="!isShow" src="https://downsc.chinaz.net/Files/DownLoad/sound1/202210/y1289.wav"  autoplay="autoplay">
+    <audio v-if="!isShow && showTime" src="https://downsc.chinaz.net/Files/DownLoad/sound1/202210/y1289.wav"  autoplay="autoplay">
     </audio>
   </div>
-  <div class="box" v-show="!isShow">
+  <div class="box" v-show="!isShow && showTime">
     精彩即将呈现 ...
     <h2 >6</h2>
+  </div>
+  <div class="handle" v-if="!showTime">
+    <el-button type="primary" @click="animation">点我查看数据</el-button>
   </div>
 </template>
 
@@ -59,11 +62,12 @@ const { router, fetch } = inject('global')
 const list = ref([])
 const loading = ref(false)
 const isShow = ref(false) // 是否展示全部数据
+const showTime = ref(false) // 是否开启倒计时
 
 
 function getList(){
   loading.value = true
-  fetch.get('/app/vote').then(res=>{
+  fetch.get('/app/vote/v2').then(res=>{
     list.value= res.data
   }).finally(()=>{
     loading.value = false
@@ -121,6 +125,7 @@ watch(()=>isShow.value,()=>{
   }
 })
 function animation(){
+  showTime.value = true
   let h2 = document.querySelector('h2')
   h2.style.display = 'block';
   timer = setInterval(() => {
@@ -142,9 +147,7 @@ function animation(){
 }
 
 onMounted(()=>{
-
   getList()
-  animation()
 })
 </script>
 
@@ -219,6 +222,13 @@ onMounted(()=>{
       }
     }
   }
+}
+
+.handle{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
 }
 
 .box{
