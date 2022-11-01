@@ -22,8 +22,7 @@
         :icon="InfoFilled"
         icon-color="#626AEF"
         :title="`你确定要提交当前评价吗？`"
-        @confirm="handleDelete(element)"
-        @click="handleSubmit"
+        @confirm="handleSubmit(element)"
       >
         <template #reference>
           <el-button  type="primary" :loading="loading">确定</el-button>
