@@ -131,7 +131,13 @@
         {
           data: list.value.map((v) => v.score),
           type: 'bar',
-          animationDuration: 7000,
+          // animationDelay:function(i){
+          //   return i * 100
+          // },
+          animationDuration: 10000,
+          animationDurationUpdate: hasRank?undefined:function(i){
+            return i * 100000
+          },
           // showBackground: true,
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             { offset: 0, color: '#83bff6' },
@@ -139,7 +145,7 @@
             { offset: 1, color: '#188df0' },
           ]),
           // color: '#000',
-          itemStyle: {
+          itemStyle: hasRank?{
             //上方显示数值
             normal: {
               label: {
@@ -152,7 +158,7 @@
                 },
               },
             },
-          },
+          }:undefined,
         },
       ],
     };
@@ -160,7 +166,7 @@
     if(!hasRank){
       setTimeout(()=>{
         setEcharts(true)
-      }, 8000)
+      }, 11000)
     }
   }
 
