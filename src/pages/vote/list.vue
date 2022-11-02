@@ -6,7 +6,10 @@
           <div class="name">{{item.name}}</div>
           <div class="num">序号：{{index+1}}</div>
         </div>
-        <el-button class="handle" @click="handle(item)" type="primary">评分</el-button>
+        <div>
+          <div class="currentScore">{{item.currentScore?item.currentScore+'分':''}}</div>
+          <el-button class="handle" @click="handle(item)" type="primary">评分</el-button>
+        </div>
       </div>
     </el-card >
   </div>
@@ -27,8 +30,13 @@ function handle(item){
 
 function getList(){
   loading.value = true
-  fetch.get(`/app/contestant`).then(res=>{
-    list.value = res.data?.contestantList||[]
+  fetch.get(`/app/contestant/v2`,{
+    params:{
+      judgeId: localStorage.getItem('judgeId'),
+      judgeRoleId: localStorage.getItem('judgeRoleId'),
+    }
+  }).then(res=>{
+    list.value = res.data||[]
     // if(res.data?.judgeId){
     //   if(localStorage.getItem('judgeId')){
     //     return 
@@ -43,9 +51,6 @@ function getList(){
 onMounted(()=>{
   getList()
   const route = useRoute()
-  if(route.query.available){
-    localStorage.setItem('available',route.query.available)
-  }
 
 })
 
@@ -66,6 +71,10 @@ onMounted(()=>{
           font-weight: 600;
           padding-bottom: 10px;
         }
+      }
+      .currentScore{
+        text-align: center;
+        padding-bottom: 10px;
       }
     }
   }
