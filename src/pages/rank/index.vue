@@ -1,5 +1,5 @@
 <template>
-  <div class="rankList" :style="`opacity:${isShow?1:0}`">
+  <div class="rankList" :style="`opacity:${isShow ? 1 : 0}`">
     <div class="top">
       <div class="msg">排行榜</div>
       <!-- <div class="topList">
@@ -29,7 +29,7 @@
         </div>
       </div> -->
     </div>
-    <div id="echarts" style="width:100%;height:500px"></div>
+    <div id="echarts" style="width: 100%; height: 600px"></div>
     <!-- <div class="list" v-if="list.length>3">
       <el-card class="item" v-for="item in list.slice(3)" :key="item.id">
         <div class="itemInfo">
@@ -41,220 +41,256 @@
         </div>
       </el-card>
     </div> -->
-    <audio v-if="!isShow && showTime" src="https://downsc.chinaz.net/Files/DownLoad/sound1/202210/y1289.wav"  autoplay="autoplay">
-    </audio>
+    <audio
+      src="https://downsc.chinaz.net/Files/DownLoad/sound1/202210/y1289.wav"
+      autoplay="autoplay"
+      loop="loop"
+    ></audio>
   </div>
   <div class="box" v-show="!isShow && showTime">
-    精彩即将呈现 ...
-    <h2 >6</h2>
+    <!-- 精彩即将呈现 ... -->
+    <h2>10</h2>
   </div>
   <div class="handle" v-if="!showTime">
-    <el-button type="primary" @click="animation">点我查看数据</el-button>
+    <el-button type="primary" @click="animation">结算</el-button>
   </div>
 </template>
 
 <script setup>
-import * as echarts from 'echarts';
-import { inject, ref, onMounted, watch } from 'vue'
+  import * as echarts from 'echarts';
+  import { inject, ref, onMounted, watch } from 'vue';
 
-const { router, fetch } = inject('global')
+  const { router, fetch } = inject('global');
 
-const list = ref([])
-const loading = ref(false)
-const isShow = ref(false) // 是否展示全部数据
-const showTime = ref(false) // 是否开启倒计时
+  const list = ref([]);
+  const loading = ref(false);
+  const isShow = ref(false); // 是否展示全部数据
+  const showTime = ref(false); // 是否开启倒计时
 
-
-function getList(){
-  loading.value = true
-  fetch.get('/app/vote/v2').then(res=>{
-    list.value= res.data
-  }).finally(()=>{
-    loading.value = false
-  })
-}
-
-function setEcharts(){
-  var chartDom = document.getElementById('echarts');
-  var myChart = echarts.init(chartDom);
-  var option;
-  option = {
-    xAxis: {
-      type: 'category',
-      data: list.value.map(v=>v.name)
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        data: list.value.map(v=>v.score),
-        type: 'bar',
-        showBackground: true,
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#83bff6' },
-          { offset: 0.5, color: '#188df0' },
-          { offset: 1, color: '#188df0' }
-        ]),
-        itemStyle: {        //上方显示数值
-            normal: {
-                label: {
-                    show: true, //开启显示
-                    position: 'top', //在上方显示
-                    textStyle: { //数值样式
-                        color: 'black',
-                        fontSize: 16
-                    }
-                }
-            }
-        }
-      }
-    ]
-  };
-
-  option && myChart.setOption(option);
-}
-
-let NUMBER = 1;
-let COUNT = 6;
-let COLORS = ['#8c00ff', '#006bff', '#4fff00', '#ffb800', '#ff0000'];
-let timer = null;
-watch(()=>isShow.value,()=>{
-  if(isShow.value){
-    setEcharts()
+  function getList() {
+    loading.value = true;
+    fetch
+      .get('/app/vote/v2')
+      .then((res) => {
+        list.value = res.data;
+      })
+      .finally(() => {
+        loading.value = false;
+      });
   }
-})
-function animation(){
-  showTime.value = true
-  let h2 = document.querySelector('h2')
-  h2.style.display = 'block';
-  timer = setInterval(() => {
-    COUNT--;
-    NUMBER++;
-    if (COUNT >= 0) {
-      h2.classList.remove('active');
-      setTimeout(() => {
-        let num = Math.floor(Math.random()*5);
-        h2.innerText = COUNT;
-        h2.style.color = COLORS[num];
-        h2.classList.add('active');
-      }, 100);
-    } else {
-      isShow.value = true
-      clearInterval(timer);
-    }
-  }, 1000);
-}
 
-onMounted(()=>{
-  getList()
-})
+  function setEcharts() {
+    var chartDom = document.getElementById('echarts');
+    var myChart = echarts.init(chartDom);
+    var option;
+    option = {
+      xAxis: [
+        {
+          type: 'category',
+          data: list.value.map((v) => v.name),
+        },
+        {
+          type: 'category',
+          data: list.value.map((v) => `第 ${v.sort} 名`),
+          axisLine: {
+            show: false, // X轴 网格线 颜色类型的修改
+          },
+          axisLabel: {
+            // X轴线 标签修改
+            textStyle: {
+              color: '#c45656', //坐标值得具体的颜色
+              fontSize: 16,
+              fontWeight: 600,
+            },
+          },
+          axisTick: {
+            // X轴线 刻度线
+            show: false,
+          },
+        },
+      ],
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          data: list.value.map((v) => v.score),
+          type: 'bar',
+          animationDuration: 7000,
+          // showBackground: true,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: '#83bff6' },
+            { offset: 0.5, color: '#188df0' },
+            { offset: 1, color: '#188df0' },
+          ]),
+          // color: '#000',
+          itemStyle: {
+            //上方显示数值
+            normal: {
+              label: {
+                show: true, //开启显示
+                position: 'top', //在上方显示
+                textStyle: {
+                  //数值样式
+                  color: 'black',
+                  fontSize: 16,
+                },
+              },
+            },
+          },
+        },
+      ],
+    };
+
+    option && myChart.setOption(option);
+  }
+
+  let NUMBER = 1;
+  let COUNT = 10;
+  let COLORS = ['#8c00ff', '#006bff', '#4fff00', '#ffb800', '#ff0000'];
+  let timer = null;
+  watch(
+    () => isShow.value,
+    () => {
+      if (isShow.value) {
+        setEcharts();
+      }
+    }
+  );
+  function animation() {
+    showTime.value = true;
+    let h2 = document.querySelector('h2');
+    h2.style.display = 'block';
+    timer = setInterval(() => {
+      COUNT--;
+      NUMBER++;
+      if (COUNT >= 0) {
+        h2.classList.remove('active');
+        setTimeout(() => {
+          let num = Math.floor(Math.random() * 5);
+          h2.innerText = COUNT;
+          h2.style.color = COLORS[num];
+          h2.classList.add('active');
+        }, 100);
+      } else {
+        isShow.value = true;
+        clearInterval(timer);
+      }
+    }, 1000);
+  }
+
+  onMounted(() => {
+    getList();
+  });
 </script>
 
 <style lang="less" scoped>
-.rankList {
-  font-size: 20px;
-  padding: 10px 20px;
-  transition: all 1s;
-  .avatar{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    overflow: hidden;
-  }
-  .top{
-    text-align: center;
-    // height: 220px;
-    .msg{
+  .rankList {
+    font-size: 20px;
+    padding: 10px 20px;
+    transition: all 1s;
+    background-color: #ecf5ff;
+    min-height: 100vh;
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .top {
       text-align: center;
-      font-size: 20px;
-      font-weight: 600;
-      color:palevioletred;
+      // height: 220px;
+      .msg {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 600;
+        padding-top: 30px;
+        color: palevioletred;
+      }
+      .topList {
+        position: relative;
+        margin-top: 10px;
+        .one {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          .name {
+            font-size: 30px;
+            padding-bottom: 10px;
+          }
+        }
+        .two {
+          position: absolute;
+          top: 40px;
+          left: 0;
+          .name {
+            font-size: 24px;
+            padding-bottom: 10px;
+          }
+        }
+        .three {
+          position: absolute;
+          top: 40px;
+          right: 0;
+          .name {
+            font-size: 24px;
+            padding-bottom: 10px;
+          }
+        }
+        .img {
+          width: 40px;
+        }
+      }
     }
-    .topList{
-      position: relative;
-      margin-top: 10px;
-      .one{
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        .name{
-          font-size: 30px;
-          padding-bottom: 10px;
-        }
+    .list {
+      .item {
+        margin: 10px 0;
       }
-      .two{
-        position: absolute;
-        top: 40px;
-        left: 0;
-        .name{
-          font-size: 24px;
-          padding-bottom: 10px;
+      .itemInfo {
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        .name {
+          margin: 0 20px 0 40px;
+          font-size: 22px;
+          flex: 1;
         }
-      }
-      .three{
-        position: absolute;
-        top: 40px;
-        right: 0;
-        .name{
-          font-size: 24px;
-          padding-bottom: 10px;
-        }
-      }
-      .img{
-        width: 40px;
       }
     }
   }
-  .list{
-    .item{
-      margin: 10px 0;
-    }
-    .itemInfo{
-      padding: 10px 0;
-      display:flex;
-      align-items: center;
-      .name{
-        margin: 0 20px 0 40px;
-        font-size: 22px;
-        flex: 1;
-      }
-    }
-  }
-}
 
-.handle{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-}
+  .handle {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-.box{
-  position: fixed;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  left: 50%;
-  text-align: center;
-}
-h2{
-  font-size:300px;
-  color:red;
-  text-align:center;
-}
-h2.active{
-  animation:count .5s;
-}
-@keyframes count {
-  from {
-    transform: scale(.1);
-    opacity: 1;
+  .box {
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    text-align: center;
   }
-  to {
-    transform: scale(3.5);
-    opacity: 0;
-    display:none;
+  h2 {
+    font-size: 300px;
+    color: red;
+    text-align: center;
   }
-}
+  h2.active {
+    animation: count 0.5s;
+  }
+  @keyframes count {
+    from {
+      transform: scale(0.1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(3.5);
+      opacity: 0;
+      display: none;
+    }
+  }
 </style>
