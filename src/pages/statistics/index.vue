@@ -6,13 +6,15 @@
           <el-radio-group v-model="mode" class="ml-4">
             <el-radio :label="0">平均分</el-radio>
             <el-radio :label="1" >总分</el-radio>
+            <el-radio :label="2" >加权平均模式</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="去除最低分个数：">
+        <div style="color:red"  v-if="mode==2">提示：加权平均模式，不应用去掉多少个最高分去掉多少个最低分</div>
+        <el-form-item label="去除最低分个数：" v-if="mode!=2">
           <el-input-number v-model="removeLowestScore" :min="0" :max="999"  />
           <span style="margin-left:10px">个</span>
         </el-form-item>
-        <el-form-item label="去除最高分个数：">
+        <el-form-item label="去除最高分个数：" v-if="mode!=2">
           <el-input-number v-model="removeHighestScore" :min="0" :max="999"   />
           <span style="margin-left:10px">个</span>
         </el-form-item>
@@ -78,7 +80,7 @@ onMounted(()=>{
 
 <style lang="less" scoped>
 .statistics {
-  font-size: 12px;
+  font-size: 14px;
   .name{
     padding: 20px 20px 0 20px;
   }

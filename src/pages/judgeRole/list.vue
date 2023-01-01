@@ -7,11 +7,10 @@
             <el-icon><Expand /></el-icon>
           </div> -->
           <div class="left">{{element.name}}</div>
-          <div class="right"></div>
+          <div class="right">权重：{{ element.weight }} %</div>
         </div>
         <div class="bottom">
-          <div></div>
-          <!-- <el-button type="primary" link @click="handleEdit(element)">编辑</el-button> -->
+          <el-button type="primary" link @click="handleEdit(element)">编辑</el-button>
           <el-popconfirm
             confirm-button-text="确定"
             cancel-button-text="取消"

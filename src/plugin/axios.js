@@ -3,8 +3,8 @@ import axios from 'axios';
 // const baseURL = 'https://www.yytasty.com/api/note/'
 
 // const baseURL = '//api.business.tanchi0757.shop'
-const baseURL = 'http://8.134.143.87:9027/';
-// const baseURL = 'http://www.yytasty.com:9027/';
+// const baseURL = 'http://8.134.143.87:9027/';
+const baseURL = 'http://www.yytasty.com:9027/';
 // const baseURL = 'http://localhost:26000/api'
 
 let config = {

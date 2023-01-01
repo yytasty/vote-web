@@ -16,14 +16,18 @@
       </el-upload>
     </div> -->
     <div class="name" v-loading="loading">
-      <el-form  >
+      <el-form  label-width="8em">
         <el-form-item label="评委角色名称：">
           <el-input v-model="name" />
+        </el-form-item>
+        <el-form-item label="权重：">
+          <el-input-number v-model="weight" show-input />&nbsp;&nbsp; % 
         </el-form-item>
       </el-form>
     </div>
     <el-divider />
     <div class="handle">
+      <div class="tips">提示：请确保各评委角色权重加起来为100%</div>
       <el-button type="primary" @click="handleSubmit" :loading="loading"
       :disabled="name.length==0||name.length>30">确定</el-button>
     </div>
@@ -38,6 +42,7 @@ const { router, fetch, message } = inject('global')
 
 const img = ref('')
 const name = ref('')
+const weight = ref(0)
 const id = ref('')
 const loading = ref(false)
 
@@ -45,7 +50,7 @@ const loading = ref(false)
 function handleSubmit(){
   if(id.value){
     loading.value = true
-    fetch.put('/admin/judgeRole',{name:name.value, id: id.value}).then(res=>{
+    fetch.put('/admin/judgeRole',{name:name.value, weight:weight.value, id: id.value}).then(res=>{
       console.log('修改成功')
       router.go(-1)
     }).catch(err=>{
@@ -56,7 +61,7 @@ function handleSubmit(){
     return 
   }
   loading.value = true
-  fetch.post('/admin/judgeRole',{name:name.value}).then(res=>{
+  fetch.post('/admin/judgeRole',{name:name.value, weight:weight.value}).then(res=>{
     console.log('添加成功')
     router.go(-1)
   }).catch(err=>{
@@ -73,6 +78,7 @@ function getInfo(id){
   ).then(res=>{
     if(res.data?.id){
       name.value = res.data.name
+      weight.value = res.data.weight
     }
   }).catch(err=>{
     console.log(err)
@@ -128,10 +134,14 @@ onMounted(()=>{
     }
   }
   .name{
-    padding: 20px 20px 0 20px;
+    padding: 20px 15px 0 15px;
   }
   .handle{
     padding: 0 20px;
+    .tips{
+      padding-bottom: 10px;
+      color:red;
+    }
     .el-button{
       width: 100%;
     }
