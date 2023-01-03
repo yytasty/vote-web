@@ -60,8 +60,12 @@ function handleSubmit(){
   if(id.value){
     loading.value = true
     fetch.put('/admin/phoneNameJudgeRoleRelation',{name:name.value, phone:phone.value, id: id.value, judgeRoleId:judgeRoleId.value}).then(res=>{
-      console.log('修改成功')
-      router.go(-1)
+      if(res.code==0){
+        ElMessage.success('修改成功')
+        router.go(-1)
+      }else{
+        ElMessage.error(res?.msg||'修改失败')
+      }
     }).catch(err=>{
       console.log(err)
     }).finally(()=>{
@@ -71,8 +75,12 @@ function handleSubmit(){
   }
   loading.value = true
   fetch.post('/admin/phoneNameJudgeRoleRelation',{name:name.value, phone:phone.value, judgeRoleId:judgeRoleId.value}).then(res=>{
-    console.log('添加成功')
-    router.go(-1)
+    if(res.code==0){
+      ElMessage.success('添加成功')
+      router.go(-1)
+    }else{
+      ElMessage.error(res?.msg||'修改失败')
+    }
   }).catch(err=>{
     console.log(err)
   }).finally(()=>{
