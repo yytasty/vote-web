@@ -30,9 +30,9 @@ function handle(item){
 
 function getList(){
   loading.value = true
-  fetch.get(`/app/contestant/v2`,{
+  fetch.get(`/app/contestant/v3`,{
     params:{
-      judgeId: localStorage.getItem('judgeId'),
+      phone: localStorage.getItem('phone'),
       judgeRoleId: localStorage.getItem('judgeRoleId'),
     }
   }).then(res=>{

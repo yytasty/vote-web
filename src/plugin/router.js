@@ -66,6 +66,21 @@ const routes = [
     name: '评分记录',
     component: () => import('../pages/vote/log.vue'),
   },
+  {
+    path: '/judge/add',
+    name: '添加人员',
+    component: () => import('../pages/judge/add.vue'),
+  },
+  {
+    path: '/judge/list',
+    name: '人员列表',
+    component: () => import('../pages/judge/list.vue'),
+  },
+  {
+    path: '/login',
+    name: '登录页',
+    component: () => import('../pages/login/index.vue'),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

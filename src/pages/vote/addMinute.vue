@@ -66,8 +66,8 @@
   function handleSubmit() {
     loading.value = true;
     fetch
-      .post('/app/vote/v2', {
-        judgeId: localStorage.getItem('judgeId'),
+      .post('/app/vote/v3', {
+        phone: localStorage.getItem('phone'),
         judgeRoleId: localStorage.getItem('judgeRoleId'),
         contestantId: id.value,
         scoreList: scoreList.value.map((v) => {

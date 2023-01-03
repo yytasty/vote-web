@@ -1,17 +1,20 @@
 <template>
   <div class="scoreList" v-loading="loading">
     <div class="itemList">
+      <div class="item">
+        <div style="text-align:center;font-size: 16px;">
+          {{judgeRoleName}}评委配置
+        </div>
+      </div>
       <div class="item" v-for="element in list" :key="element.id">
         <div class="top">
-          <!-- <div class="handleMove">
-            <el-icon><Expand /></el-icon>
-          </div> -->
           <div class="left">{{element.name}}</div>
-          <div class="right">权重：{{ element.weight }} %</div>
+          <div class="right">手机号：{{ element.phone }}</div>
         </div>
         <div class="bottom">
-          <el-button type="primary" link @click="handleEdit(element)">编辑</el-button>
-          <el-button type="primary" link @click="jumpJudge(element)">人员列表</el-button>
+          <div></div>
+          <!-- <el-button type="primary" link @click="handleEdit(element)">编辑</el-button>
+          <el-button type="primary" link @click="jumpJudge(element)">人员列表</el-button> -->
           <el-popconfirm
             confirm-button-text="确定"
             cancel-button-text="取消"
@@ -26,7 +29,7 @@
           </el-popconfirm>
         </div>
       </div>
-      <el-card class="add" @click="jumpAddRole">
+      <el-card class="add" @click="jumpAddJudge">
         <el-icon><Plus /></el-icon>
       </el-card>
     </div>
@@ -36,27 +39,18 @@
 <script setup>
 import { inject, ref, onMounted, watch } from 'vue'
 import { Search, Plus, Expand } from '@element-plus/icons-vue'
-import draggable from 'vuedraggable'
+import { useRoute } from 'vue-router'
 const { router, fetch } = inject('global')
 
-const searchValue = ref('')
 const loading = ref(false)
 const list = ref([])
-
-// 改变排序
-watch(()=>list.value,()=>{
-  changeIndex()
-})
-
-// 点击搜索
-function handleSearch(url){
-  router.push(url)
-}
+const judgeRoleName = ref('')
+const judgeRoleId = ref('')
 
 // 获取列表
 function getList(){
   loading.value = true
-  fetch.get('/admin/judgeRole').then(res=>{
+  fetch.get(`/admin/phoneNameJudgeRoleRelation?judgeRoleId=${judgeRoleId.value}`).then(res=>{
     if(res.data){
       list.value = res.data
     }
@@ -67,35 +61,30 @@ function getList(){
   })
 }
 
-// 更新排名
-function changeIndex(){
-  // fetch.post('/admin/judgeRole/sort', list.value.map(v=>v.id))
-}
 
 // 点击删除
 function handleDelete(item){
-  fetch.delete(`/admin/judgeRole/${item.id}`).then(res=>{
+  fetch.delete(`/admin/phoneNameJudgeRoleRelation/${item.id}`).then(res=>{
     getList()
   })
 }
 
 // 跳转添加页面
-function jumpAddRole(){
-  router.push('/judgeRole/add')
+function jumpAddJudge(){
+  router.push(`/judge/add?judgeRoleId=${judgeRoleId.value}&judgeRoleName=${judgeRoleName.value}`)
 }
 
-// 跳转人员列表
-function jumpJudge(item){
-  router.push(`/judge/list?judgeRoleId=${item.id}&judgeRoleName=${item.name}`)
-}
 
 // 点击修改
 function handleEdit(item){
-  router.push(`/judgeRole/add?id=${item.id}`)
+  router.push(`/judge/add?id=${item.id}&judgeRoleId=${judgeRoleId.value}&judgeRoleName=${judgeRoleName.value}`)
 }
 
 
 onMounted(()=>{
+  const route = useRoute()
+  judgeRoleId.value = route.query.judgeRoleId
+  judgeRoleName.value =  route.query.judgeRoleName
   getList()
 })
 

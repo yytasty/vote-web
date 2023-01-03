@@ -4,6 +4,8 @@
       <el-table :data="list" style="width: 100%">
         <el-table-column prop="judgeRoleName" label="评委身份名称" />
         <el-table-column prop="contestantName" label="组别" />
+        <el-table-column prop="phone" label="评委手机号" />
+        <el-table-column prop="name" label="评委名称" />
         <el-table-column prop="score" label="分数" />
       </el-table>
     </el-card>
