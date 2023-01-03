@@ -3,7 +3,7 @@
     <div class="title">请登录</div>
     <div class="item">
       <el-form  label-width="6em">
-        <el-form-item label="名称：">
+        <el-form-item label="姓名：">
           <el-input v-model="name" />
         </el-form-item>
         <el-form-item label="手机号：">
