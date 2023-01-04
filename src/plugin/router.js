@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: '首页',
     component: () => import('../pages/home.vue'),
   },
@@ -65,6 +65,11 @@ const routes = [
     path: '/vote/log',
     name: '评分记录',
     component: () => import('../pages/vote/log.vue'),
+  },
+  {
+    path: '/vote/score',
+    name: '分数',
+    component: () => import('../pages/vote/score.vue'),
   },
   {
     path: '/judge/add',

@@ -33,7 +33,7 @@ function handleLogin(item){
   fetch.post(`/app/vote/phoneLogin`,{phone:phone.value,name:name.value}).then(res=>{
     if(res.data){
       ElMessage.success('登录成功')
-      localStorage.setItem('phone',res.data.phone)
+      localStorage.setItem('phone1',res.data.phone)
       localStorage.setItem('name',res.data.name)
       localStorage.setItem('judgeRoleId',res.data.judgeRoleId)
       jumpVote()
@@ -52,7 +52,7 @@ function jumpVote(){
   router.push('/vote/list')
 }
 
-if(localStorage.getItem('phone')){
+if(localStorage.getItem('phone1')){
   jumpVote()
 }
 

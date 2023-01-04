@@ -21,6 +21,10 @@
         <el-icon class="img" style="color:#409E33"><List /></el-icon>
         <div class="name">评分记录</div>
       </div>
+      <div class="item" @click="goPage('/vote/score')">
+        <el-icon class="img" style="color:rgb(140, 197, 255);"><Platform /></el-icon>
+        <div class="name">人工分数</div>
+      </div>
       <div class="item" @click="goPage('/rank')">
         <el-icon class="img" style="color:#F56C6C"><TrendCharts /></el-icon>
         <div class="name">数据展示</div>
@@ -31,7 +35,7 @@
 
 <script setup>
 import { inject } from 'vue'
-import { UserFilled, Histogram, Management, VideoCameraFilled, TrendCharts, List } from '@element-plus/icons-vue'
+import { UserFilled, Histogram, Management, VideoCameraFilled, TrendCharts, List, Platform } from '@element-plus/icons-vue'
 const { router, fetch } = inject('global')
 
 function goPage(url){

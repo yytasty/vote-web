@@ -32,7 +32,7 @@ function getList(){
   loading.value = true
   fetch.get(`/app/contestant/v3`,{
     params:{
-      phone: localStorage.getItem('phone'),
+      phone: localStorage.getItem('phone1'),
       judgeRoleId: localStorage.getItem('judgeRoleId'),
     }
   }).then(res=>{
@@ -49,8 +49,11 @@ function getList(){
 }
 
 onMounted(()=>{
+  if(!localStorage.getItem('phone1')){
+    router.push('/login')
+    return 
+  }
   getList()
-  const route = useRoute()
 
 })
 
