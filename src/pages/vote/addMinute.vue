@@ -83,9 +83,11 @@
           router.go(-1);
         } else {
           ElMessage.error(res?.msg || '提交失败');
+          localStorage.clear();
         }
       })
       .catch((err) => {
+        localStorage.clear();
         console.log(err);
       })
       .finally(() => {
