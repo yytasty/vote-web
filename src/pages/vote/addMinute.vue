@@ -84,10 +84,12 @@
         } else {
           ElMessage.error(res?.msg || '提交失败');
           localStorage.clear();
+          router.push('/login');
         }
       })
       .catch((err) => {
         localStorage.clear();
+        router.push('/login');
         console.log(err);
       })
       .finally(() => {
