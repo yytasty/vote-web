@@ -23,7 +23,7 @@
       </div>
       <div class="item" @click="goPage('/vote/score')">
         <el-icon class="img" style="color:rgb(140, 197, 255);"><Platform /></el-icon>
-        <div class="name">人工分数</div>
+        <div class="name">功能设置</div>
       </div>
       <div class="item" @click="goPage('/rank')">
         <el-icon class="img" style="color:#F56C6C"><TrendCharts /></el-icon>
