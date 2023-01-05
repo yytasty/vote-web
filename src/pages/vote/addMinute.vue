@@ -67,7 +67,7 @@
     loading.value = true;
     fetch
       .post('/app/vote/v3', {
-        phone: localStorage.getItem('phone1'),
+        phone: localStorage.getItem('phone2'),
         judgeRoleId: localStorage.getItem('judgeRoleId'),
         contestantId: id.value,
         scoreList: scoreList.value.map((v) => {
@@ -128,10 +128,10 @@
   }
 
   onMounted(() => {
-    if(!localStorage.getItem('phone1')){
-    router.push('/login')
-    return 
-  }
+    if (!localStorage.getItem('phone2')) {
+      router.push('/login');
+      return;
+    }
     getList();
     const route = useRoute();
     id.value = route.query.id;

@@ -50,7 +50,7 @@
     </div>
     <div class="box" v-show="!isShow && showTime">
       <!-- 精彩即将呈现 ... -->
-      <h2>10</h2>
+      <h2>5</h2>
     </div>
     <div class="handle" v-if="!showTime">
       <el-button type="primary" @click="animation">结算</el-button>
@@ -68,7 +68,7 @@
   const loading = ref(false);
   const isShow = ref(false); // 是否展示全部数据
   const showTime = ref(false); // 是否开启倒计时
-  const maxNum =  ref(0) // 最大值
+  const maxNum = ref(0); // 最大值
 
   function getList() {
     loading.value = true;
@@ -76,13 +76,14 @@
       .get('/app/vote/v2')
       .then((res) => {
         list.value = res.data;
-        list.value.map(v=>{
-          if(v.score > maxNum.value){
-            maxNum.value = v.score
+        list.value.map((v) => {
+          if (v.score > maxNum.value) {
+            maxNum.value = v.score;
           }
-        })
-  
-        maxNum.value = Math.floor(maxNum.value) + 35 - Math.floor(maxNum.value % 5)
+        });
+
+        maxNum.value =
+          Math.floor(maxNum.value) + 35 - Math.floor(maxNum.value % 5);
       })
       .finally(() => {
         loading.value = false;
@@ -94,8 +95,8 @@
     var chartDom = document.getElementById('echarts');
     var myChart = echarts.init(chartDom);
     var option;
-    if(hasRank){
-      list.value.sort((a,b)=>a.sort-b.sort)
+    if (hasRank) {
+      list.value.sort((a, b) => a.sort - b.sort);
     }
     option = {
       xAxis: [
@@ -103,29 +104,31 @@
           type: 'category',
           data: list.value.map((v) => v.name),
         },
-        hasRank?{
-          type: 'category',
-          data: list.value.map((v) => `第 ${v.sort} 名`),
-          axisLine: {
-            show: false, // X轴 网格线 颜色类型的修改
-          },
-          axisLabel: {
-            // X轴线 标签修改
-            textStyle: {
-              color: '#c45656', //坐标值得具体的颜色
-              fontSize: 16,
-              fontWeight: 600,
-            },
-          },
-          axisTick: {
-            // X轴线 刻度线
-            show: false,
-          },
-        }:{},
+        hasRank
+          ? {
+              type: 'category',
+              data: list.value.map((v) => `第 ${v.sort} 名`),
+              axisLine: {
+                show: false, // X轴 网格线 颜色类型的修改
+              },
+              axisLabel: {
+                // X轴线 标签修改
+                textStyle: {
+                  color: '#c45656', //坐标值得具体的颜色
+                  fontSize: 16,
+                  fontWeight: 600,
+                },
+              },
+              axisTick: {
+                // X轴线 刻度线
+                show: false,
+              },
+            }
+          : {},
       ],
       yAxis: {
         type: 'value',
-        max: maxNum.value
+        max: maxNum.value,
       },
       series: [
         {
@@ -134,10 +137,12 @@
           // animationDelay:function(i){
           //   return i * 100
           // },
-          animationDuration: 10000,
-          animationDurationUpdate: hasRank?undefined:function(i){
-            return i * 100000
-          },
+          animationDuration: 8000,
+          animationDurationUpdate: hasRank
+            ? undefined
+            : function (i) {
+                return i * 100000;
+              },
           // showBackground: true,
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             { offset: 0, color: '#83bff6' },
@@ -145,33 +150,35 @@
             { offset: 1, color: '#188df0' },
           ]),
           // color: '#000',
-          itemStyle: hasRank?{
-            //上方显示数值
-            normal: {
-              label: {
-                show: true, //开启显示
-                position: 'top', //在上方显示
-                textStyle: {
-                  //数值样式
-                  color: 'black',
-                  fontSize: 16,
+          itemStyle: hasRank
+            ? {
+                //上方显示数值
+                normal: {
+                  label: {
+                    show: true, //开启显示
+                    position: 'top', //在上方显示
+                    textStyle: {
+                      //数值样式
+                      color: 'black',
+                      fontSize: 16,
+                    },
+                  },
                 },
-              },
-            },
-          }:undefined,
+              }
+            : undefined,
         },
       ],
     };
     option && myChart.setOption(option);
-    if(!hasRank){
-      setTimeout(()=>{
-        setEcharts(true)
-      }, 11000)
+    if (!hasRank) {
+      setTimeout(() => {
+        setEcharts(true);
+      }, 11000);
     }
   }
 
   let NUMBER = 1;
-  let COUNT = 10;
+  let COUNT = 5;
   let COLORS = ['#8c00ff', '#006bff', '#4fff00', '#ffb800', '#ff0000'];
   let timer = null;
   watch(
@@ -210,14 +217,14 @@
 </script>
 
 <style lang="less" scoped>
-  .coverBox{
-    background-color:   #c6e2ff;
+  .coverBox {
+    background-color: #c6e2ff;
   }
   .rankList {
     font-size: 20px;
     padding: 10px 20px;
     transition: all 1s;
-    background-color:   #c6e2ff;
+    background-color: #c6e2ff;
     min-height: 100vh;
     .avatar {
       width: 50px;
